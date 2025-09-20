@@ -1,0 +1,102 @@
+/* styles/globals.css */
+@import "tailwindcss";
+
+:root{
+  --background:#ffffff;
+  --foreground:#171717;
+  /* These get filled by next/font via CSS variables */
+  --font-heading: 'Bodoni Moda', serif;
+  --font-body: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+@theme inline{
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-heading);
+}
+
+html, body{ height:100%; }
+body{
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+h1,h2,h3,h4{ font-family: var(--font-heading); }
+
+::-webkit-scrollbar{ display:none; }
+body{ -ms-overflow-style:none; scrollbar-width:none; }
+
+@media (hover:hover) and (pointer:fine){
+  html,body,a,button,[role="button"]{ cursor:none !important; }
+}
+
+/* Existing global styles... */
+
+/* Preloader Styles */
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent; /* Transparent to let panels handle background */
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.word-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.word {
+  color: white;
+  font-size: 2.5rem; /* Regular size */
+  font-weight: 300; /* Thin font */
+  font-family: "Lora", serif; /* Fallback to Lora for thin, elegant look */
+  margin: 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Stack words vertically */
+.word-0 { transform: translateY(-3.5rem); }
+.word-1 { transform: translateY(0); }
+.word-2 { transform: translateY(3.5rem); }
+
+.panel {
+  position: fixed;
+  top: 0;
+  width: 50vw;
+  height: 100vh;
+  background: black;
+  z-index: 999;
+}
+
+.panel.left {
+  left: 0;
+}
+
+.panel.right {
+  right: 0;
+}
+
+@media (max-width: 768px) {
+  .word {
+    font-size: 1.5rem;
+  }
+  .word-0 { transform: translateY(-2rem); }
+  .word-1 { transform: translateY(0); }
+  .word-2 { transform: translateY(2rem); }
+}
