@@ -4,11 +4,10 @@ import { useRef } from "react";
 
 const slideData = {
   id: 1,
-  image: "/SecondVideo.mp4",
+  video: "/SecondVideo.mp4",
   overlay: "bg-neutral-900/50",
   title: "Curating the Impossible",
-  subtitle:
-    "Sourcing treasures, tailored to your story.",
+  subtitle: "Sourcing treasures, tailored to your story.",
   cta: { label: "SOURCING REQUESTS", href: "/sourcing-request" },
 };
 
@@ -18,10 +17,21 @@ export default function SecondSlide() {
   return (
     <section
       ref={slideRef}
-      className="relative min-h-[100svh] w-full flex-none m-0 p-0 overflow-hidden box-border bg-fixed bg-cover bg-center"
+      className="relative min-h-[100svh] w-full flex-none m-0 p-0 overflow-hidden box-border"
       aria-label={slideData.title}
-      style={{ backgroundImage: `url(${slideData.image})` }}
     >
+      {/* Fixed Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="fixed inset-0 -z-10 h-full w-full object-cover"
+      >
+        <source src={slideData.video} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
       {/* Overlay */}
       <div
         className={`absolute inset-0 h-full w-full ${slideData.overlay}`}
@@ -77,7 +87,11 @@ export default function SecondSlide() {
             stroke="currentColor"
             strokeWidth={1.5}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </div>
       </motion.div>

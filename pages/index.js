@@ -14,7 +14,13 @@ import SecondSlide from "./components/Slide22";
 import PrivacyCookiesModal from "./components/CookieModal";
 import ThirdSlide from "./components/Slide33";
 
+// ⬇️ Lenis smooth scroll hook
+import useLenis from "./components/hooks/userLenis";
+
 export default function Home() {
+  // ⬇️ Initialize Lenis once for smooth scrolling
+  useLenis();
+
   const [isLoading, setIsLoading] = useState(true);
   const categoriesRef = useRef(null);
 
@@ -62,7 +68,7 @@ export default function Home() {
             <SecondSlide />
           </section>
 
-          {/* Third Slide (Parallax Categories) */}
+          {/* Third Slide (Pinned Categories Scrollytelling) */}
           <section className="relative z-0">
             <ThirdSlide />
           </section>

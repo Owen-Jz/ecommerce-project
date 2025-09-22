@@ -4,15 +4,15 @@ import { useRef } from "react";
 
 const slideData = {
   id: 1,
-  video: "/Video.mp4", // use a video source, not as bg
+  video: "/SecondVideo.mp4",
   overlay: "bg-neutral-900/50",
-  title: "Here to Help Build\nYour Dream Closet",
+  title: "Authenticity First",
   subtitle:
-    "From runway pieces to timeless classics, we source, authenticate, and deliver treasures to your closet",
-  cta: { label: "Shop Now", href: "/shop" },
+    "At CFC, every piece you see has already passed our authenticity check",
+  cta: { label: "Shop All", href: "/shop" },
 };
 
-export default function Slide1() {
+export default function SecondSlide() {
   const slideRef = useRef(null);
 
   return (
@@ -21,13 +21,13 @@ export default function Slide1() {
       className="relative min-h-[100svh] w-full flex-none m-0 p-0 overflow-hidden box-border"
       aria-label={slideData.title}
     >
-      {/* Background Video */}
+      {/* Fixed Background Video */}
       <video
         autoPlay
         loop
         muted
         playsInline
-        className="absolute inset-0 -z-10 h-full w-full object-cover"
+        className="fixed inset-0 -z-10 h-full w-full object-cover"
       >
         <source src={slideData.video} type="video/mp4" />
         Your browser does not support the video tag.
@@ -36,7 +36,7 @@ export default function Slide1() {
       {/* Overlay */}
       <div
         className={`absolute inset-0 h-full w-full ${slideData.overlay}`}
-        style={{ opacity: 0.65 }}
+        style={{ opacity: 0.75 }}
       />
 
       {/* Content */}
@@ -72,7 +72,11 @@ export default function Slide1() {
       <motion.div
         className="absolute bottom-6 left-1/2 -translate-x-1/2 text-neutral-100/80"
         animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        transition={{
+          duration: 1.5,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
       >
         <span className="text-sm uppercase tracking-wider">Scroll</span>
         <div className="flex justify-center mt-1">
