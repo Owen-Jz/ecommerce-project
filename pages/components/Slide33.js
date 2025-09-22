@@ -13,19 +13,19 @@ const CATEGORIES = [
   {
     label: "READY TO WEAR",
     href: "/ready-to-wear",
-    bg: "/Slide1.png",
+    bg: "/dress2.png",
     description: "Curated ready-to-wear pieces—tailored silhouettes.",
   },
   {
     label: "BAGS",
     href: "/bags",
-    bg: "/Closet.jpg",
+    bg: "/Slide4.png",
     description: "Iconic bags with heritage craftsmanship and enduring value.",
   },
   {
     label: "ACCESSORIES",
     href: "/accessories",
-    bg: "/auth.jpg",
+    bg: "/acc2.jpg",
     description: "Belts, jewelry, and finishing touches that define the look.",
   },
 ];

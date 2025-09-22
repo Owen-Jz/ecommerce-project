@@ -23,7 +23,7 @@ export const NEW_PRODUCTS = [
     title: "Vintage Jacket",
     price: "$2,500",
     category: "rtw",
-    images: ["/dress1.jpg", "/dress2.jpg"],
+    images: ["/dress1.jpg", "/dress2.png"],
     href: "/product/vintage-jacket",
   },
 ];
@@ -72,7 +72,7 @@ export default function NewProductsSection({
             {title}
           </h2>
           <Link
-            href="/products"
+            href="/new"
             className="text-sm uppercase tracking-wide text-neutral-700 hover:text-black transition"
           >
             View All

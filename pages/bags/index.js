@@ -7,7 +7,6 @@ import NavbarCFC from "../components/Navabar";
 import FooterCFC from "../components/Footer";
 
 const PRODUCTS = [
-  // ===== BAGS (8) =====
   { title: "Classic Flap Bag", price: "$4,500", category: "flap", images: ["/bag1.jpg", "/bag2.jpg"], href: "/product/classic-flap-bag" },
   { title: "Boy Bag", price: "$5,000", category: "flap", images: ["/bag1.jpg", "/bag2.jpg"], href: "/product/boy-bag" },
   { title: "Gabrielle Bag", price: "$3,800", category: "shoulder", images: ["/bag1.jpg", "/bag2.jpg"], href: "/product/gabrielle-bag" },
@@ -35,7 +34,7 @@ function ProductCard({ title, price, images, href }) {
     >
       <Link href={href} className="group block" aria-label={title}>
         <div
-          className="relative w-full overflow-hidden rounded-lg bg-neutral-100"
+          className="relative w-full overflow-hidden bg-neutral-100"
           style={{ aspectRatio: "4 / 5" }}
         >
           <Image
@@ -44,7 +43,6 @@ function ProductCard({ title, price, images, href }) {
             fill
             sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw"
             className="object-cover object-center transition-opacity duration-300 group-hover:opacity-0"
-            priority={false}
           />
           <Image
             src={images[1] || images[0]}
@@ -52,7 +50,6 @@ function ProductCard({ title, price, images, href }) {
             fill
             sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw"
             className="object-cover object-center opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-            priority={false}
           />
         </div>
         <div className="mt-2">
@@ -80,12 +77,12 @@ export default function BagsPage() {
     <>
       <NavbarCFC />
       <main className="bg-white">
-        {/* ===== HERO (dark overlay, white text) ===== */}
+        {/* ===== HERO ===== */}
         <section className="relative min-h-[80vh] flex items-center justify-center text-center">
           <div className="absolute inset-0 z-0">
             <Image
               src="/bag-hero.jpg"
-              alt=""
+              alt="Bag hero background"
               fill
               priority
               sizes="100vw"
@@ -101,7 +98,7 @@ export default function BagsPage() {
               Icons to carry, forever.
             </h1>
             <p className="text-white/80 text-sm sm:text-base">
-              From the Classic Flap to elusive collector’s editions, our Chanel bags embody the essence of timeless style and enduring legacy
+              From the Classic Flap to elusive collector’s editions, our Chanel bags embody timeless style and legacy.
             </p>
           </div>
         </section>
@@ -123,7 +120,7 @@ export default function BagsPage() {
                     key={f.key}
                     onClick={() => setActive(f.key)}
                     className={[
-                      "px-3 py-1.5 rounded-full border text-xs sm:text-sm font-semibold transition-colors",
+                      "px-3 py-1.5 border text-xs sm:text-sm font-semibold transition-colors",
                       isActive
                         ? "border-neutral-900 bg-neutral-900 text-white"
                         : "border-neutral-300 text-neutral-600 hover:text-neutral-900 hover:border-neutral-900",
@@ -157,16 +154,7 @@ export default function BagsPage() {
                   : "Clutches"}
               </h2>
               <p className="text-neutral-500 text-sm font-normal">
-                Showing{" "}
-                {active === "all"
-                  ? "all Chanel bags"
-                  : active === "flap"
-                  ? "flap bags"
-                  : active === "tote"
-                  ? "totes"
-                  : active === "shoulder"
-                  ? "shoulder bags"
-                  : "clutches"}
+                Showing {active === "all" ? "all Chanel bags" : active}
               </p>
             </div>
             <motion.div ref={gridRef}>

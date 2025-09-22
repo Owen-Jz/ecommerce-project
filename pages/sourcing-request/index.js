@@ -13,42 +13,43 @@ export default function SourcingRequestPage() {
     { step: "5. Authentication & Delivery", detail: "Each piece is authenticated and packaged. Please allow ~2 weeks for delivery after sourcing." },
   ];
 
-  // Consistent styles for form inputs, textarea, and file input
-  const inputStyles = "w-full border border-neutral-300 px-4 py-3 text-sm text-neutral-800 placeholder-neutral-400 outline-none focus:ring-2 focus:ring-neutral-900 focus:border-neutral-900 rounded-md transition";
+  // Input styles with straight edges only
+  const inputStyles =
+    "w-full border border-neutral-300 px-4 py-3 text-sm text-neutral-800 placeholder-neutral-400 outline-none focus:ring-2 focus:ring-neutral-900 focus:border-neutral-900 transition";
 
   return (
     <>
       <NavbarCFC />
       <main className="bg-white">
- {/* ===== HERO ===== */}
-<section className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center justify-center text-center overflow-hidden">
-  {/* Background image */}
-  <div className="absolute inset-0">
-    <Image
-      src="/Slide3.png" // make sure it's in /public
-      alt="Sourcing request hero background"
-      fill
-      priority
-      quality={80}
-      className="object-cover object-center"
-    />
-    <div className="absolute inset-0 bg-black/50" />
-  </div>
+        {/* ===== HERO ===== */}
+        <section className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center justify-center text-center overflow-hidden">
+          {/* Background image */}
+          <div className="absolute inset-0">
+            <Image
+              src="/Slide3.png"
+              alt="Sourcing request hero background"
+              fill
+              priority
+              quality={80}
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-black/50" />
+          </div>
 
-  {/* Content */}
-  <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
-    <h1
-      className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal leading-tight"
-      style={{ fontFamily: '"Plantagenet Cherokee", serif' }}
-    >
-      Make a Request For Your Dream Coco
-    </h1>
-    <p className="text-white/90 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
-      Whether you’re hunting for a rare collector’s piece or filling a long-standing gap
-      in your wardrobe, CFC sources the most coveted Chanel treasures just for you.
-    </p>
-  </div>
-</section>
+          {/* Content */}
+          <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
+            <h1
+              className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal leading-tight"
+              style={{ fontFamily: '"Plantagenet Cherokee", serif' }}
+            >
+              Make a Request For Your Dream Coco
+            </h1>
+            <p className="text-white/90 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
+              Whether you’re hunting for a rare collector’s piece or filling a long-standing gap
+              in your wardrobe, CFC sources the most coveted Chanel treasures just for you.
+            </p>
+          </div>
+        </section>
 
         {/* ===== PROCESS + FORM ===== */}
         <section className="py-10 sm:py-14 lg:py-16">
@@ -70,13 +71,14 @@ export default function SourcingRequestPage() {
                 ))}
               </ul>
             </div>
+
             {/* Form */}
             <motion.form
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="bg-white border border-neutral-200 p-5 sm:p-6 lg:p-8 space-y-5 shadow-sm rounded-lg"
+              className="bg-white border border-neutral-200 p-5 sm:p-6 lg:p-8 space-y-5 shadow-sm"
               onSubmit={(e) => {
                 e.preventDefault();
                 console.log("Form submitted:", Object.fromEntries(new FormData(e.target)));
@@ -94,6 +96,7 @@ export default function SourcingRequestPage() {
                 className={inputStyles}
                 required
               />
+
               {/* Condition checkboxes */}
               <fieldset className="space-y-2">
                 <legend className="text-sm font-medium text-neutral-800">Condition *</legend>
@@ -105,7 +108,7 @@ export default function SourcingRequestPage() {
                           type="checkbox"
                           name="condition"
                           value={label}
-                          className="h-4 w-4 text-neutral-900 border-neutral-300 rounded focus:ring-neutral-900"
+                          className="h-4 w-4 text-neutral-900 border-neutral-300 focus:ring-neutral-900"
                         />
                         {label}
                       </label>
@@ -113,23 +116,27 @@ export default function SourcingRequestPage() {
                   )}
                 </div>
               </fieldset>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input type="date" placeholder="Preferred Timeline *" className={inputStyles} required />
                 <input type="text" placeholder="Budget *" className={inputStyles} required />
               </div>
+
               <textarea placeholder="Message" rows={4} className={inputStyles} />
+
               <div>
                 <label className="block text-sm font-medium text-neutral-800 mb-1">
                   Upload Reference File
                 </label>
                 <input
                   type="file"
-                  className="block w-full text-sm text-neutral-700 border border-neutral-300 p-2.5 rounded-md outline-none focus:ring-2 focus:ring-neutral-900 file:bg-neutral-100 file:border-0 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-neutral-800 file:mr-3"
+                  className="block w-full text-sm text-neutral-700 border border-neutral-300 p-2.5 outline-none focus:ring-2 focus:ring-neutral-900 file:bg-neutral-100 file:border-0 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-neutral-800 file:mr-3"
                 />
               </div>
+
               <button
                 type="submit"
-                className="w-full sm:w-auto px-6 py-3 bg-neutral-900 text-white text-sm font-medium border border-neutral-900 rounded-md hover:bg-neutral-800 transition focus:ring-2 focus:ring-neutral-900 focus:outline-none"
+                className="w-full sm:w-auto px-6 py-3 bg-neutral-900 text-white text-sm font-medium border border-neutral-900 hover:bg-neutral-800 transition focus:ring-2 focus:ring-neutral-900 focus:outline-none"
               >
                 Submit Request
               </button>

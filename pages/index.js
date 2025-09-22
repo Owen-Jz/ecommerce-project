@@ -73,20 +73,6 @@ export default function Home() {
             <ThirdSlide />
           </section>
 
-          {/* Categories Section */}
-          <section
-            id="categories"
-            ref={categoriesRef}
-            className="pt-20 md:pt-24 min-h-screen relative z-10"
-          >
-            <CategoriesCFC />
-          </section>
-
-          {/* Sourcing */}
-          <section className="relative z-10">
-            <SourcingRequestCFC />
-          </section>
-
           {/* Authenticity */}
           <section className="relative z-10">
             <AuthenticityCFC />

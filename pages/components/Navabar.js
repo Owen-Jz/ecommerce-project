@@ -55,7 +55,7 @@ export default function NavbarCFC({ blurAmount = 8 }) {
       },
       "ready-to-wear": {
         title: "Ready to Wear",
-        src: "/dress2.jpg",
+        src: "/dress2.png",
         tagline: "Tailored, timeless, impeccably cut.",
         blurb:
           "Elevated staples and standout statements — premium fabrics, modern tailoring, flawless fit.",
@@ -74,9 +74,9 @@ export default function NavbarCFC({ blurAmount = 8 }) {
       {
         key: "sourcing-requests",
         label: "Sourcing Requests",
-        href: "/sourcing",
+        href: "/sourcing-request",
       },
-      { key: "about", label: "About", href: "/about" },
+      // { key: "about", label: "About", href: "/about" },
     ],
     []
   );

@@ -6,26 +6,20 @@ import Link from "next/link";
 import NavbarCFC from "../components/Navabar";
 import FooterCFC from "../components/Footer";
 
-const PRODUCTS = [
-  // Handbags
-  { title: "Classic Flap Bag", price: "$4,500", category: "handbags", images: ["/bag1.jpg", "/bag2.jpg"], href: "/product/classic-flap-bag" },
-  { title: "Mini Diana Bag", price: "$5,800", category: "handbags", images: ["/bag2.jpg", "/bag1.jpg"], href: "/product/mini-diana" },
-  { title: "Coco Handle Mini", price: "$4,300", category: "handbags", images: ["/bag2.jpg", "/bag1.jpg"], href: "/product/coco-handle-mini" },
-
-  // Ready to Wear
-  { title: "Tweed Cropped Jacket", price: "$2,900", category: "ready-to-wear", images: ["/dress1.jpg", "/dress2.jpg"], href: "/product/tweed-cropped-jacket" },
-  { title: "Wool Midi Dress", price: "$3,200", category: "ready-to-wear", images: ["/dress2.png", "/dress1.jpg"], href: "/product/wool-midi-dress" },
-
-  // Accessories
+const NEW_PRODUCTS = [
+  { title: "2025 Classic Flap", price: "$6,200", category: "bags", images: ["/bag1.jpg", "/bag2.jpg"], href: "/product/2025-classic-flap" },
+  { title: "Mini Diana Bag", price: "$5,800", category: "bags", images: ["/bag2.jpg", "/bag1.jpg"], href: "/product/mini-diana" },
   { title: "Pearl Drop Earrings", price: "$1,050", category: "accessories", images: ["/acc1.jpg", "/acc2.jpg"], href: "/product/pearl-drop-earrings" },
   { title: "Silk Scarf Limited Edition", price: "$700", category: "accessories", images: ["/acc2.jpg", "/acc1.jpg"], href: "/product/silk-scarf-limited" },
+  { title: "Tweed Cropped Jacket", price: "$2,900", category: "rtw", images: ["/dress1.jpg", "/dress2.jpg"], href: "/product/tweed-cropped-jacket" },
+  { title: "Coco Handle Mini", price: "$4,300", category: "bags", images: ["/bag3.jpg", "/bag1.jpg"], href: "/product/coco-handle-mini" },
 ];
 
 const FILTERS = [
   { key: "all", label: "All" },
-  { key: "handbags", label: "Handbags" },
-  { key: "ready-to-wear", label: "Ready to Wear" },
+  { key: "bags", label: "Bags" },
   { key: "accessories", label: "Accessories" },
+  { key: "rtw", label: "Ready to Wear" },
 ];
 
 function ProductCard({ title, price, images, href }) {
@@ -64,7 +58,7 @@ function ProductCard({ title, price, images, href }) {
   );
 }
 
-export default function ShopAllPage() {
+export default function NewItemsPage() {
   const [active, setActive] = useState("all");
   const filterRef = useRef(null);
   const gridRef = useRef(null);
@@ -72,8 +66,8 @@ export default function ShopAllPage() {
   const gridInView = useInView(gridRef, { once: true, margin: "-50px" });
 
   const products = useMemo(() => {
-    if (active === "all") return PRODUCTS;
-    return PRODUCTS.filter((p) => p.category === active);
+    if (active === "all") return NEW_PRODUCTS;
+    return NEW_PRODUCTS.filter((p) => p.category === active);
   }, [active]);
 
   return (
@@ -84,8 +78,8 @@ export default function ShopAllPage() {
         <section className="relative min-h-[80vh] flex items-center justify-center text-center">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/Slide2.jpg"
-              alt="Shop all hero background"
+              src="/Slide4.png"
+              alt="New arrivals background"
               fill
               priority
               sizes="100vw"
@@ -98,10 +92,10 @@ export default function ShopAllPage() {
               className="text-white text-4xl sm:text-5xl font-normal leading-tight"
               style={{ fontFamily: '"Plantagenet Cherokee", serif' }}
             >
-              Shop All Collections
+              Fresh Arrivals, Just In.
             </h1>
             <p className="text-white/80 text-sm sm:text-base">
-              Handbags, ready-to-wear, and accessories — curated and authenticated Chanel classics and rare finds.
+              Explore the latest curated Chanel pieces — authenticated, timeless, and ready for your collection.
             </p>
           </div>
         </section>
@@ -147,15 +141,15 @@ export default function ShopAllPage() {
                 style={{ fontFamily: '"Plantagenet Cherokee", serif' }}
               >
                 {active === "all"
-                  ? "All Products"
-                  : active === "handbags"
-                  ? "Handbags"
-                  : active === "ready-to-wear"
-                  ? "Ready to Wear"
-                  : "Accessories"}
+                  ? "All New Arrivals"
+                  : active === "bags"
+                  ? "New Bags"
+                  : active === "accessories"
+                  ? "New Accessories"
+                  : "New Ready-to-Wear"}
               </h2>
               <p className="text-neutral-500 text-sm font-normal">
-                Showing {active === "all" ? "everything" : active}
+                Showing {active === "all" ? "all categories" : active}
               </p>
             </div>
             <motion.div ref={gridRef}>
@@ -172,7 +166,6 @@ export default function ShopAllPage() {
                 ))}
               </div>
             </motion.div>
-
             {/* Pagination */}
             <div className="mt-10 sm:mt-12 flex items-center justify-center gap-4 text-sm">
               <button className="text-neutral-600 hover:text-neutral-900">← Previous</button>

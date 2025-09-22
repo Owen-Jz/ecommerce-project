@@ -7,7 +7,6 @@ import NavbarCFC from "../components/Navabar";
 import FooterCFC from "../components/Footer";
 
 const PRODUCTS = [
-  // ===== ACCESSORIES (8, with specific categories) =====
   { title: "Pearl Earrings", price: "$1,000", category: "jewelry", images: ["/acc1.jpg", "/acc2.jpg"], href: "/product/pearl-earrings" },
   { title: "Coco Necklace", price: "$1,200", category: "jewelry", images: ["/acc1.jpg", "/acc2.jpg"], href: "/product/coco-necklace" },
   { title: "Logo Brooch", price: "$900", category: "jewelry", images: ["/acc1.jpg", "/acc2.jpg"], href: "/product/logo-brooch" },
@@ -34,7 +33,7 @@ function ProductCard({ title, price, images, href }) {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <Link href={href} className="group block" aria-label={title}>
-        <div className="relative w-full overflow-hidden rounded-lg bg-neutral-100" style={{ aspectRatio: "4 / 5" }}>
+        <div className="relative w-full overflow-hidden bg-neutral-100" style={{ aspectRatio: "4 / 5" }}>
           <Image
             src={images[0]}
             alt={title}
@@ -77,7 +76,7 @@ export default function AccessoriesPage() {
     <>
       <NavbarCFC />
       <main className="bg-white">
-        {/* ===== HERO (full-bleed, tall, dark overlay, white text) ===== */}
+        {/* ===== HERO ===== */}
         <section className="relative min-h-[80vh] flex items-center justify-center text-center">
           <div className="absolute inset-0 z-0">
             <Image
@@ -98,8 +97,8 @@ export default function AccessoriesPage() {
               Pearls, brooches, jewelry, and finishing touches — accessories that complete the story of Chanel elegance.
             </p>
           </div>
-
         </section>
+
         {/* ===== FILTERS ===== */}
         <section className="mt-8">
           <motion.div
@@ -117,12 +116,13 @@ export default function AccessoriesPage() {
                     key={f.key}
                     onClick={() => setActive(f.key)}
                     className={[
-                      "px-3 py-1.5 rounded-full border text-xs sm:text-sm font-semibold transition-colors",
+                      "px-3 py-1.5 border text-xs sm:text-sm font-semibold transition-colors",
                       isActive
                         ? "border-neutral-900 bg-neutral-900 text-white"
                         : "border-neutral-300 text-neutral-600 hover:text-neutral-900 hover:border-neutral-900",
                     ].join(" ")}
                     aria-pressed={isActive}
+                    style={{ borderRadius: 0 }}
                   >
                     {f.label}
                   </button>
@@ -131,6 +131,7 @@ export default function AccessoriesPage() {
             </div>
           </motion.div>
         </section>
+
         {/* ===== GRID SECTION ===== */}
         <section className="mt-8 sm:mt-10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
