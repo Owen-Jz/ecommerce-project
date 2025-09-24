@@ -8,7 +8,7 @@ const authData = {
   overlay: "bg-neutral-900/50",
   title: "Our Commitment to Authenticity",
   subtitle:
-    "At Closet Full of Coco, authenticity is non-negotiable. Each item undergoes a multi-point verification process — materials, stitching, serials, provenance — carried out by trusted experts.",
+    "At CFC, every piece you see has already passed our authenticity check",
 };
 
 export default function AuthenticityCFC() {

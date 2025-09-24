@@ -9,10 +9,11 @@ export default function NavbarCFC({ blurAmount = 8 }) {
   const [onLight, setOnLight] = useState(false);
   const [hoverKey, setHoverKey] = useState(null);
   const [activeKey, setActiveKey] = useState(null);
-
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const shellRef = useRef(null);
   const buttonRef = useRef(null);
-
+  const searchRef = useRef(null);
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -22,7 +23,7 @@ export default function NavbarCFC({ blurAmount = 8 }) {
     return () => clearTimeout(timer);
   }, [hoverKey]);
 
-  // ====== Preview content ======
+  // Search results based on query
   const previews = useMemo(
     () => ({
       "shop-all": {
@@ -76,7 +77,6 @@ export default function NavbarCFC({ blurAmount = 8 }) {
         label: "Sourcing Requests",
         href: "/sourcing-request",
       },
-      // { key: "about", label: "About", href: "/about" },
     ],
     []
   );
@@ -87,16 +87,38 @@ export default function NavbarCFC({ blurAmount = 8 }) {
     []
   );
 
-  // Escape key
+  // Filtered search results
+  const searchResults = useMemo(() => {
+    if (!searchQuery) return [];
+    const query = searchQuery.toLowerCase();
+    return Object.entries(previews)
+      .filter(
+        ([key, preview]) =>
+          preview.title.toLowerCase().includes(query) ||
+          preview.tagline.toLowerCase().includes(query) ||
+          preview.blurb.toLowerCase().includes(query)
+      )
+      .map(([key, preview]) => ({
+        key,
+        ...preview,
+        href: items.find((item) => item.key === key)?.href || "/shop",
+      }));
+  }, [searchQuery, previews, items]);
+
+  // Escape key handling for menu and search
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        setSearchOpen(false);
+        setSearchQuery("");
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Close menu on outside click
+  // Close menu and search on outside click
   useEffect(() => {
     const onClick = (e) => {
       if (!shellRef.current || !buttonRef.current) return;
@@ -107,18 +129,26 @@ export default function NavbarCFC({ blurAmount = 8 }) {
       ) {
         setOpen(false);
       }
+      if (
+        searchOpen &&
+        searchRef.current &&
+        !searchRef.current.contains(e.target)
+      ) {
+        setSearchOpen(false);
+        setSearchQuery("");
+      }
     };
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
-  }, [open]);
+  }, [open, searchOpen]);
 
   // Lock body scroll
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "auto";
+    document.body.style.overflow = open || searchOpen ? "hidden" : "auto";
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [open]);
+  }, [open, searchOpen]);
 
   // Switch navbar style (scroll check)
   useEffect(() => {
@@ -136,7 +166,7 @@ export default function NavbarCFC({ blurAmount = 8 }) {
     };
   }, [isHome]);
 
-  // ====== Animation configs ======
+  // Animation configs
   const listVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -145,6 +175,7 @@ export default function NavbarCFC({ blurAmount = 8 }) {
     },
     exit: { opacity: 0 },
   };
+
   const itemVariants = {
     hidden: { opacity: 0, y: 12 },
     show: {
@@ -154,8 +185,10 @@ export default function NavbarCFC({ blurAmount = 8 }) {
     },
     exit: { opacity: 0, y: 8, transition: { duration: 0.25 } },
   };
+
   const drawerTransition = { duration: 0.85, ease: [0.25, 0.8, 0.25, 1] };
   const previewTransition = { duration: 0.5, ease: [0.4, 0, 0.2, 1] };
+  const searchTransition = { duration: 0.4, ease: [0.4, 0, 0.2, 1] };
 
   // Theme classes
   const textClass = onLight
@@ -202,7 +235,6 @@ export default function NavbarCFC({ blurAmount = 8 }) {
             <path strokeWidth="1.5" d="M4 7h16M4 12h16M4 17h16" />
           </svg>
         </button>
-
         {/* Center: Brand */}
         <Link
           href="/"
@@ -214,9 +246,24 @@ export default function NavbarCFC({ blurAmount = 8 }) {
         >
           Closet Full of Coco
         </Link>
-
-        {/* Right: Account + Cart */}
+        {/* Right: Search + Account + Cart */}
         <div className="flex items-center gap-4 sm:gap-6">
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className={`inline-flex items-center gap-1.5 p-0 ${textClass} hover:opacity-80`}
+            aria-label="Search"
+          >
+            <svg
+              className={`h-5 w-5 ${textClass}`}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <circle cx="11" cy="11" r="8" strokeWidth="1.5" />
+              <path d="M16.5 16.5L21 21" strokeWidth="1.5" />
+            </svg>
+          </button>
           <Link
             href="/account"
             className={`inline-flex items-center gap-1.5 p-0 ${textClass} hover:opacity-80`}
@@ -249,7 +296,6 @@ export default function NavbarCFC({ blurAmount = 8 }) {
           </Link>
         </div>
       </nav>
-
       {/* Fullscreen Menu + Preview */}
       <AnimatePresence>
         {open && (
@@ -264,7 +310,6 @@ export default function NavbarCFC({ blurAmount = 8 }) {
               transition={drawerTransition}
               onClick={() => setOpen(false)}
             />
-
             {/* Combined Shell */}
             <motion.div
               key="shell"
@@ -300,7 +345,6 @@ export default function NavbarCFC({ blurAmount = 8 }) {
                     <path strokeWidth="1.5" d="M6 6l12 12M18 6l-12 12" />
                   </svg>
                 </button>
-
                 {/* Menu List */}
                 <nav className="flex h-full w-full items-center justify-center px-6">
                   <motion.ul
@@ -334,7 +378,6 @@ export default function NavbarCFC({ blurAmount = 8 }) {
                   </motion.ul>
                 </nav>
               </motion.aside>
-
               {/* Right Preview */}
               <motion.aside
                 className="hidden md:block h-screen flex-1 relative"
@@ -363,7 +406,6 @@ export default function NavbarCFC({ blurAmount = 8 }) {
                     />
                   )}
                 </AnimatePresence>
-
                 {/* Blur Overlay */}
                 <motion.div
                   className="absolute inset-0 bg-black/15 pointer-events-none"
@@ -376,7 +418,6 @@ export default function NavbarCFC({ blurAmount = 8 }) {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
                 />
-
                 {/* Text Overlay */}
                 <motion.div
                   className="absolute inset-0 flex items-center justify-center px-6"
@@ -400,6 +441,94 @@ export default function NavbarCFC({ blurAmount = 8 }) {
                   </div>
                 </motion.div>
               </motion.aside>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+      {/* Search Modal */}
+      <AnimatePresence>
+        {searchOpen && (
+          <>
+            <motion.div
+              key="search-overlay"
+              className="fixed inset-0 z-[140] bg-black/55"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={searchTransition}
+              onClick={() => {
+                setSearchOpen(false);
+                setSearchQuery("");
+              }}
+            />
+            <motion.div
+              key="search-modal"
+              ref={searchRef}
+              className="fixed inset-x-0 top-16 z-[150] mx-auto max-w-2xl bg-white/90 backdrop-blur-lg p-6 sm:p-8 rounded-md shadow-lg"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={searchTransition}
+            >
+              <div className="flex items-center gap-4 mb-6">
+                <svg
+                  className="h-5 w-5 text-neutral-900"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle cx="11" cy="11" r="8" strokeWidth="1.5" />
+                  <path d="M16.5 16.5L21 21" strokeWidth="1.5" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search products..."
+                  className="w-full bg-transparent text-neutral-900 placeholder-neutral-500 focus:outline-none text-base sm:text-lg"
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchOpen(false);
+                    setSearchQuery("");
+                  }}
+                  className="p-2 text-neutral-900/90 hover:opacity-80 focus:outline-none"
+                  aria-label="Close search"
+                >
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path strokeWidth="1.5" d="M6 6l12 12M18 6l-12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="max-h-[60vh] overflow-y-auto">
+                {searchQuery && searchResults.length === 0 && (
+                  <p className="text-neutral-600 text-sm">No results found.</p>
+                )}
+                {searchResults.map((result) => (
+                  <Link
+                    key={result.key}
+                    href={result.href}
+                    className="block p-4 hover:bg-neutral-100 rounded-md mb-2"
+                    onClick={() => {
+                      setSearchOpen(false);
+                      setSearchQuery("");
+                    }}
+                  >
+                    <h4 className="text-lg font-semibold text-neutral-900">
+                      {result.title}
+                    </h4>
+                    <p className="text-sm text-neutral-700">{result.tagline}</p>
+                    <p className="text-xs text-neutral-600 mt-1">{result.blurb}</p>
+                  </Link>
+                ))}
+              </div>
             </motion.div>
           </>
         )}

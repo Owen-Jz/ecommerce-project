@@ -31,28 +31,13 @@ export const NEW_PRODUCTS = [
 export default function NewProductsSection({
   products = NEW_PRODUCTS,
   title = "New Arrivals",
-  showFilters = true,
   limit = null,
 }) {
-  const categories = useMemo(() => {
-    const cats = Array.from(new Set(products.map((p) => p.category)));
-    return ["all", ...cats];
-  }, [products]);
-
-  const [active, setActive] = useState("all");
   const scrollRef = useRef(null);
-
-  const list = useMemo(() => {
-    const filtered =
-      active === "all"
-        ? products
-        : products.filter((p) => p.category === active);
-    return limit ? filtered.slice(0, limit) : filtered;
-  }, [products, active, limit]);
 
   const scroll = (direction) => {
     if (scrollRef.current) {
-      const scrollAmount = scrollRef.current.clientWidth / 3; // Adjusted to move by one product
+      const scrollAmount = scrollRef.current.clientWidth; // move by full width (3 items)
       scrollRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -63,8 +48,8 @@ export default function NewProductsSection({
   return (
     <section id="new-products" className="w-full py-14 sm:py-20 bg-white">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Heading + View All CTA */}
-        <div className="mb-8 sm:mb-12 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        {/* Heading + View All CTA (always in a row) */}
+        <div className="mb-8 sm:mb-12 flex flex-row items-center justify-between gap-4">
           <h2
             className="text-zinc-900 text-2xl md:text-3xl font-normal leading-tight"
             style={{ fontFamily: '"Plantagenet Cherokee", serif' }}
@@ -78,6 +63,7 @@ export default function NewProductsSection({
             View All
           </Link>
         </div>
+
         {/* Scrollable Container */}
         <div className="relative">
           <div
@@ -85,7 +71,7 @@ export default function NewProductsSection({
             className="grid grid-flow-col auto-cols-[minmax(0,calc(100%/3))] gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 scrollbar-hide"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {list.map((p, i) => (
+            {products.map((p, i) => (
               <motion.div
                 key={p.href + i}
                 className="snap-start w-full"
@@ -102,45 +88,48 @@ export default function NewProductsSection({
               </motion.div>
             ))}
           </div>
-          {/* Scroll Buttons */}
-          <button
-            onClick={() => scroll("left")}
-            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md hover:bg-white transition"
-            aria-label="Scroll left"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+
+          {/* Scroll Buttons (Desktop only) */}
+          <div className="hidden sm:flex">
+            <button
+              onClick={() => scroll("left")}
+              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md hover:bg-white transition"
+              aria-label="Scroll left"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md hover:bg-white transition"
-            aria-label="Scroll right"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md hover:bg-white transition"
+              aria-label="Scroll right"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -176,12 +165,11 @@ function ProductCard({ product }) {
       </div>
       <div className="mt-3 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="truncate text-xs uppercase tracking-wide text-neutral-500">
+          {/* No truncation / clamping */}
+          <p className="text-xs uppercase tracking-wide text-neutral-500">
             {category === "rtw" ? "Ready to wear" : category}
           </p>
-          <h3 className="mt-0.5 line-clamp-1 text-base font-normal">
-            {title}
-          </h3>
+          <h3 className="mt-0.5 text-base font-normal">{title}</h3>
         </div>
         <div className="shrink-0 text-sm sm:text-base font-medium tabular-nums">
           {price}

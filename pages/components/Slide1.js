@@ -1,10 +1,10 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
 const slideData = {
   id: 1,
-  video: "/Video.mp4", // use a video source, not as bg
+  video: "/Video.mp4", // video source
   overlay: "bg-neutral-900/50",
   title: "Here to Help Build\nYour Dream Closet",
   subtitle:
@@ -15,23 +15,33 @@ const slideData = {
 export default function Slide1() {
   const slideRef = useRef(null);
 
+  // Track scroll progress relative to this section
+  const { scrollYProgress } = useScroll({
+    target: slideRef,
+    offset: ["start start", "end start"], // triggers when top enters/leaves viewport
+  });
+
+  // Map scroll progress to a slower movement
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]); // smaller movement = slower scroll
+
   return (
     <section
       ref={slideRef}
       className="relative min-h-[100svh] w-full flex-none m-0 p-0 overflow-hidden box-border"
       aria-label={slideData.title}
     >
-      {/* Background Video */}
-      <video
+      {/* Background Video with Parallax */}
+      <motion.video
         autoPlay
         loop
         muted
         playsInline
+        style={{ y }} // <-- parallax effect
         className="absolute inset-0 -z-10 h-full w-full object-cover"
       >
         <source src={slideData.video} type="video/mp4" />
         Your browser does not support the video tag.
-      </video>
+      </motion.video>
 
       {/* Overlay */}
       <div

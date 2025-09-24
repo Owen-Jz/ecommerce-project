@@ -7,7 +7,7 @@ import {
   useTransform,
   useSpring,
 } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const CATEGORIES = [
   {
@@ -32,8 +32,6 @@ const CATEGORIES = [
 
 const ENTRY_BUFFER = 0.22;
 const MID_END = 0.7;
-const EXIT_HOLD = 0.92;
-const ENTRY_HOLD = 0.08;
 
 function progressToStep(p) {
   if (p < ENTRY_BUFFER) return 0;
@@ -50,19 +48,15 @@ export default function ThirdSlide() {
     offset: ["start start", "end end"],
   });
 
-  // Make zoom feel more responsive but still smooth
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 75, // ↑ faster response
+    stiffness: 75,
     damping: 18,
     mass: 0.35,
   });
 
-  // UNIFORM zoom across the entire pinned section for all layers
-  // (clear, noticeable, but not aggressive)
   const uniformScale = useTransform(smoothProgress, [0, 1], [1.04, 1.18]);
 
   const [step, setStep] = useState(0);
-  const [blocking, setBlocking] = useState(false);
   const [fadeDuration, setFadeDuration] = useState(1.0);
 
   useMotionValueEvent(scrollYProgress, "change", (p) => {
@@ -74,37 +68,13 @@ export default function ThirdSlide() {
       prevStepRef.current = next;
       setStep(next);
     }
-
-    // tiny holds at entry/exit to avoid snap
-    if (!blocking && (p < ENTRY_HOLD || p > EXIT_HOLD)) {
-      setBlocking(true);
-      const t = setTimeout(() => setBlocking(false), 230);
-      return () => clearTimeout(t);
-    }
   });
-
-  useEffect(() => {
-    if (!blocking) return;
-    const prevent = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    };
-    window.addEventListener("wheel", prevent, { passive: false });
-    window.addEventListener("touchmove", prevent, { passive: false });
-    return () => {
-      window.removeEventListener("wheel", prevent);
-      window.removeEventListener("touchmove", prevent);
-    };
-  }, [blocking]);
 
   return (
     <section ref={sectionRef} className="relative w-full h-[500vh]">
-      {/* Sticky viewport; isolated so fixed bg video can't bleed through */}
       <div className="sticky top-0 h-screen w-full overflow-hidden isolate">
-        {/* Opaque blocker */}
         <div className="absolute inset-0 bg-black -z-20" />
 
-        {/* Background layers: crossfade + UNIFORM zoom tied to scroll */}
         {CATEGORIES.map((cat, i) => {
           const isActive = i === step;
           return (
@@ -115,10 +85,7 @@ export default function ThirdSlide() {
                 backgroundImage: `url(${cat.bg})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                backfaceVisibility: "hidden",
-                WebkitBackfaceVisibility: "hidden",
-                transform: "translateZ(0)",
-                scale: uniformScale, // ⬅️ uniform, noticeable zoom
+                scale: uniformScale,
               }}
               initial={false}
               animate={{ opacity: isActive ? 1 : 0 }}
@@ -129,13 +96,22 @@ export default function ThirdSlide() {
           );
         })}
 
-        {/* Static, centered UI */}
+        {/* Progress Sidebar (on the left) */}
+        <div className="absolute left-6 top-1/2 -translate-y-1/2 h-[60%] w-[4px] bg-white/20 rounded-full z-20">
+          <motion.div
+            className="w-full bg-white rounded-full"
+            style={{
+              height: useTransform(smoothProgress, [0, 1], ["0%", "100%"]),
+            }}
+          />
+        </div>
+
+        {/* Centered UI */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center">
           <h2 className="text-zinc-50 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif">
             Shop by Category
           </h2>
 
-          {/* Clickable category links with smooth underline; stays centered */}
           <nav className="relative mt-6 flex flex-col sm:flex-row gap-6 items-center justify-center">
             {CATEGORIES.map((c, j) => {
               const active = j === step;
