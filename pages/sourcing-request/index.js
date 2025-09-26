@@ -2,7 +2,13 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import NavbarCFC from "../components/Navabar";
-import FooterCFC from "../components/Footer"; 
+import FooterCFC from "../components/Footer";
+
+const DIDOT_STACK = 'Didot, "Bodoni Moda", "Didot LT STD", "Times New Roman", serif';
+
+// Straight-edge inputs everywhere
+const inputStyles =
+  "w-full rounded-none border border-neutral-300 px-4 py-3 text-sm text-neutral-800 placeholder-neutral-400 outline-none focus:ring-2 focus:ring-neutral-900 focus:border-neutral-900 transition";
 
 export default function SourcingRequestPage() {
   const processSteps = [
@@ -13,9 +19,26 @@ export default function SourcingRequestPage() {
     { step: "5. Authentication & Delivery", detail: "Each piece is authenticated and packaged. Please allow ~2 weeks for delivery after sourcing." },
   ];
 
-  // Input styles with straight edges only
-  const inputStyles =
-    "w-full border border-neutral-300 px-4 py-3 text-sm text-neutral-800 placeholder-neutral-400 outline-none focus:ring-2 focus:ring-neutral-900 focus:border-neutral-900 transition";
+  // simple handle normalizer
+  function normalizeHandle(v) {
+    return (v || "").trim().replace(/^@+/, "");
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+
+    // normalize IG handle before sending
+    const rawIg = fd.get("instagram_handle") || "";
+    fd.set("instagram_handle", normalizeHandle(rawIg));
+
+    // build payload (example)
+    const payload = Object.fromEntries(fd.entries());
+    console.log("Sourcing request submitted:", payload);
+
+    // TODO: send to your API endpoint
+    // await fetch("/api/sourcing-request", { method: "POST", body: fd });
+  }
 
   return (
     <>
@@ -23,7 +46,6 @@ export default function SourcingRequestPage() {
       <main className="bg-white">
         {/* ===== HERO ===== */}
         <section className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center justify-center text-center overflow-hidden">
-          {/* Background image */}
           <div className="absolute inset-0">
             <Image
               src="/Slide3.png"
@@ -36,11 +58,10 @@ export default function SourcingRequestPage() {
             <div className="absolute inset-0 bg-black/50" />
           </div>
 
-          {/* Content */}
           <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
             <h1
               className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal leading-tight"
-              style={{ fontFamily: '"Plantagenet Cherokee", serif' }}
+              style={{ fontFamily: DIDOT_STACK }}
             >
               Make a Request For Your Dream Coco
             </h1>
@@ -58,7 +79,7 @@ export default function SourcingRequestPage() {
             <div className="space-y-6">
               <h2
                 className="text-xl sm:text-2xl md:text-3xl font-normal text-neutral-900"
-                style={{ fontFamily: '"Plantagenet Cherokee", serif' }}
+                style={{ fontFamily: DIDOT_STACK }}
               >
                 Our Sourcing Process
               </h2>
@@ -78,19 +99,40 @@ export default function SourcingRequestPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="bg-white border border-neutral-200 p-5 sm:p-6 lg:p-8 space-y-5 shadow-sm"
-              onSubmit={(e) => {
-                e.preventDefault();
-                console.log("Form submitted:", Object.fromEntries(new FormData(e.target)));
-              }}
+              className="bg-white border border-neutral-200 p-5 sm:p-6 lg:p-8 space-y-5 shadow-sm rounded-none"
+              onSubmit={handleSubmit}
+              style={{ borderRadius: 0 }}
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <input type="text" placeholder="First Name *" className={inputStyles} required />
-                <input type="text" placeholder="Last Name *" className={inputStyles} required />
+                <input name="first_name" type="text" placeholder="First Name *" className={inputStyles} required />
+                <input name="last_name" type="text" placeholder="Last Name *" className={inputStyles} required />
               </div>
-              <input type="email" placeholder="Email *" className={inputStyles} required />
-              <input type="tel" placeholder="Phone" className={inputStyles} />
+
+              <input name="email" type="email" placeholder="Email *" className={inputStyles} required />
+              <input name="phone" type="tel" placeholder="Phone" className={inputStyles} />
+
+              {/* Instagram handle (added) */}
+              <div>
+                <label className="block text-sm text-neutral-800 mb-1">Instagram Handle (optional)</label>
+                <div className="border border-neutral-300 px-0 py-0 rounded-none" style={{ borderRadius: 0 }}>
+                  <div className="flex items-center">
+                    <span className="px-3 py-3 text-sm text-neutral-500 select-none">@</span>
+                    <input
+                      name="instagram_handle"
+                      type="text"
+                      inputMode="text"
+                      placeholder="yourhandle"
+                      className="w-full rounded-none border-0 px-0 py-3 pr-4 text-sm text-neutral-800 placeholder-neutral-400 outline-none focus:ring-0"
+                    />
+                  </div>
+                </div>
+                <p className="mt-1 text-xs text-neutral-500">
+                  We use this to review preferences and communicate faster.
+                </p>
+              </div>
+
               <input
+                name="query"
                 type="text"
                 placeholder="Item Name or Description, Size, Color *"
                 className={inputStyles}
@@ -118,25 +160,28 @@ export default function SourcingRequestPage() {
               </fieldset>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <input type="date" placeholder="Preferred Timeline *" className={inputStyles} required />
-                <input type="text" placeholder="Budget *" className={inputStyles} required />
+                <input name="timeline" type="date" placeholder="Preferred Timeline *" className={inputStyles} required />
+                <input name="budget" type="text" placeholder="Budget *" className={inputStyles} required />
               </div>
 
-              <textarea placeholder="Message" rows={4} className={inputStyles} />
+              <textarea name="message" placeholder="Message" rows={4} className={inputStyles} />
 
               <div>
                 <label className="block text-sm font-medium text-neutral-800 mb-1">
                   Upload Reference File
                 </label>
                 <input
+                  name="reference_file"
                   type="file"
-                  className="block w-full text-sm text-neutral-700 border border-neutral-300 p-2.5 outline-none focus:ring-2 focus:ring-neutral-900 file:bg-neutral-100 file:border-0 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-neutral-800 file:mr-3"
+                  className="block w-full rounded-none text-sm text-neutral-700 border border-neutral-300 p-2.5 outline-none focus:ring-2 focus:ring-neutral-900 file:bg-neutral-100 file:border-0 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-neutral-800 file:mr-3"
+                  style={{ borderRadius: 0 }}
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full sm:w-auto px-6 py-3 bg-neutral-900 text-white text-sm font-medium border border-neutral-900 hover:bg-neutral-800 transition focus:ring-2 focus:ring-neutral-900 focus:outline-none"
+                className="w-full sm:w-auto px-6 py-3 bg-neutral-900 text-white text-sm font-medium border border-neutral-900 hover:bg-neutral-800 transition focus:ring-2 focus:ring-neutral-900 focus:outline-none rounded-none"
+                style={{ borderRadius: 0 }}
               >
                 Submit Request
               </button>

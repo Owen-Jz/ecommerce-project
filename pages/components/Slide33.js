@@ -19,13 +19,13 @@ const CATEGORIES = [
   {
     label: "BAGS",
     href: "/bags",
-    bg: "/Slide4.png",
+    bg: "/bags-category.png",
     description: "Iconic bags with heritage craftsmanship and enduring value.",
   },
   {
     label: "ACCESSORIES",
     href: "/accessories",
-    bg: "/acc2.jpg",
+    bg: "/accessories-category.png",
     description: "Belts, jewelry, and finishing touches that define the look.",
   },
 ];
@@ -54,8 +54,6 @@ export default function ThirdSlide() {
     mass: 0.35,
   });
 
-  const uniformScale = useTransform(smoothProgress, [0, 1], [1.04, 1.18]);
-
   const [step, setStep] = useState(0);
   const [fadeDuration, setFadeDuration] = useState(1.0);
 
@@ -70,8 +68,13 @@ export default function ThirdSlide() {
     }
   });
 
+  // Manual step change
+  const goToStep = (i) => {
+    setStep(i);
+  };
+
   return (
-    <section ref={sectionRef} className="relative w-full h-[500vh]">
+    <section ref={sectionRef} className="relative w-full h-[300vh]">
       <div className="sticky top-0 h-screen w-full overflow-hidden isolate">
         <div className="absolute inset-0 bg-black -z-20" />
 
@@ -80,12 +83,11 @@ export default function ThirdSlide() {
           return (
             <motion.div
               key={cat.label}
-              className="absolute inset-0 will-change-transform will-change-opacity -z-10"
+              className="absolute inset-0 -z-10"
               style={{
                 backgroundImage: `url(${cat.bg})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                scale: uniformScale,
               }}
               initial={false}
               animate={{ opacity: isActive ? 1 : 0 }}
@@ -96,10 +98,10 @@ export default function ThirdSlide() {
           );
         })}
 
-        {/* Progress Sidebar (on the left) */}
-        <div className="absolute left-6 top-1/2 -translate-y-1/2 h-[60%] w-[4px] bg-white/20 rounded-full z-20">
+        {/* Sidebar progress */}
+        <div className="absolute left-6 top-1/2 -translate-y-1/2 h-[60%] w-[4px] bg-white/20 z-20">
           <motion.div
-            className="w-full bg-white rounded-full"
+            className="w-full bg-white"
             style={{
               height: useTransform(smoothProgress, [0, 1], ["0%", "100%"]),
             }}
@@ -108,45 +110,51 @@ export default function ThirdSlide() {
 
         {/* Centered UI */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center">
-          <h2 className="text-zinc-50 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif">
+          <h2 className="text-zinc-50 text-3xl sm:text-5xl lg:text-6xl font-serif mb-8">
             Shop by Category
           </h2>
 
-          <nav className="relative mt-6 flex flex-col sm:flex-row gap-6 items-center justify-center">
+          {/* Description ABOVE */}
+          <p className="mb-8 max-w-2xl text-neutral-100 font-sans text-lg sm:text-xl">
+            {CATEGORIES[step].description}
+          </p>
+
+          {/* Bigger Category Buttons (no rounded corners) */}
+          <nav className="flex flex-col sm:flex-row gap-6 items-center justify-center">
             {CATEGORIES.map((c, j) => {
               const active = j === step;
               return (
-                <div key={c.label} className="relative">
-                  <a
-                    href={c.href}
-                    className={`px-6 py-2 text-sm font-medium font-sans transition-colors ${
-                      active
-                        ? "text-neutral-900 bg-white"
-                        : "text-neutral-100 hover:text-white/90"
+                <motion.button
+                  key={c.label}
+                  onClick={() => goToStep(j)}
+                  className={`relative px-8 py-4 text-lg sm:text-xl font-semibold font-sans transition-colors ${active
+                      ? "text-neutral-900 bg-white"
+                      : "text-neutral-100 hover:text-white/90"
                     }`}
-                    aria-current={active ? "true" : "false"}
-                  >
-                    {c.label}
-                  </a>
-                  {active && (
-                    <motion.div
-                      layoutId="category-underline"
-                      className="absolute left-0 right-0 -bottom-1 h-[2px] bg-white/90"
-                      transition={{ duration: 0.5, ease: "easeInOut" }}
-                    />
-                  )}
-                </div>
+                  aria-current={active ? "true" : "false"}
+                  whileHover="hover"
+                  initial="rest"
+                  animate="rest"
+                >
+                  {c.label}
+                  {/* Hover Outline */}
+                  <motion.span
+                    variants={{
+                      rest: { opacity: 0, scale: 0.95 },
+                      hover: { opacity: 1, scale: 1 },
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="absolute inset-0 border-2 border-white pointer-events-none"
+                  />
+                </motion.button>
               );
             })}
           </nav>
 
-          <p className="mt-12 max-w-xl text-neutral-100 font-sans text-base sm:text-lg">
-            {CATEGORIES[step].description}
-          </p>
         </div>
       </div>
 
-      {/* Preload images */}
+      {/* Preload */}
       <div className="hidden">
         {CATEGORIES.map((c) => (
           <img key={c.bg} src={c.bg} alt="" loading="lazy" />

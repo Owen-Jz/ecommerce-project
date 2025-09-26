@@ -67,34 +67,7 @@ export default function SecondSlide() {
         </div>
       </motion.div>
 
-      {/* Scroll Down Indicator */}
-      <motion.div
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-neutral-100/80"
-        animate={{ y: [0, 8, 0] }}
-        transition={{
-          duration: 1.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      >
-        <span className="text-sm uppercase tracking-wider">Scroll</span>
-        <div className="flex justify-center mt-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.5}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </div>
-      </motion.div>
+
     </section>
   );
 }

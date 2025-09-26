@@ -4,43 +4,39 @@ import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 const archiveData = {
-  video: "/chanel.mp4",
+  image: "/archive.png",
   overlay: "bg-black/70",
-  title: "Every closet tells a story — here’s ours",
+  title: "Every closet tells a story ",
   subtitle:
-    "Step inside our archive. Discover the rare, the iconic, and the timeless — each piece a chapter in fashion’s living history.",
-  cta: { label: "Explore the Archive", href: "/archive" },
+    "Here’s ours",
+  cta: { label: "View the Archive", href: "/archive" },
 };
 
 export default function ArchiveSectionCFC() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"], // parallax across the section’s time in view
+    offset: ["start end", "end start"], // parallax while in view
   });
 
-  // Gentle parallax so it doesn’t eat into scroll range
-  const videoY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+  // Exaggerated parallax effect
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
 
   return (
     <section
       ref={ref}
       className="relative h-screen min-h-[100dvh] w-full m-0 p-0 overflow-clip box-border"
     >
-      {/* Parallax Video (non-interactive so it won't trap scroll/taps) */}
-      <motion.video
-        src={archiveData.video}
-        autoPlay
-        loop
-        muted
-        playsInline
-        poster="/images/video-poster.jpg"
+      {/* Parallax Image */}
+      <motion.img
+        src={archiveData.image}
+        alt="Archive Background"
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 h-full w-full object-cover will-change-transform"
-        style={{ y: videoY }}
+        style={{ y: imageY }}
       />
 
-      {/* Dark Overlay (also non-interactive) */}
+      {/* Dark Overlay */}
       <div
         className={`pointer-events-none absolute inset-0 h-full w-full ${archiveData.overlay}`}
         style={{ opacity: 0.85 }}

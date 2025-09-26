@@ -1,6 +1,6 @@
 // pages/_app.js
 import "@/styles/globals.css";
-import CursorCFC from "./components/Cursor"; // Adjust path if needed
+
 
 import { Bodoni_Moda, Poppins } from "next/font/google";
 
@@ -23,7 +23,6 @@ const poppins = Poppins({
 export default function App({ Component, pageProps }) {
   return (
     <div className={`${bodoni.variable} ${poppins.variable}`}>
-      <CursorCFC />
       <Component {...pageProps} />
     </div>
   );

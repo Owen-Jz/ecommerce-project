@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const authData = {
-  image: "/Slide1.png",
+  image: "/auth.png",
   overlay: "bg-neutral-900/50",
   title: "Our Commitment to Authenticity",
   subtitle:

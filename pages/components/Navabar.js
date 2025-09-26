@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -65,21 +65,19 @@ export default function NavbarCFC({ blurAmount = 8 }) {
     []
   );
 
-  const items = useMemo(
-    () => [
-      { key: "shop-all", label: "Shop All", href: "/shop" },
-      { key: "new", label: "New", href: "/new" },
-      { key: "handbags", label: "Handbags", href: "/bags" },
-      { key: "accessories", label: "Accessories", href: "/accessories" },
-      { key: "ready-to-wear", label: "Ready to Wear", href: "/ready-to-wear" },
-      {
-        key: "sourcing-requests",
-        label: "Sourcing Requests",
-        href: "/sourcing-request",
-      },
-    ],
-    []
-  );
+const items = useMemo(
+  () => [
+    { key: "shop-all", label: "Shop All", href: "/shop" },
+    { key: "new", label: "New Arrivals", href: "/new" },
+    { key: "handbags", label: "Bags", href: "/bags" }, // keep key for previews
+    { key: "accessories", label: "Accessories", href: "/accessories" },
+    { key: "ready-to-wear", label: "Ready to Wear", href: "/ready-to-wear" },
+    { key: "pre-order", label: "Pre Order", href: "/pre-order" },
+    { key: "sourcing-requests", label: "Sourcing Requests", href: "/sourcing-request" },
+    { key: "archive", label: "Archive", href: "/archive" },
+  ],
+  []
+);
 
   const previewAllowed = useMemo(
     () =>
@@ -156,6 +154,7 @@ export default function NavbarCFC({ blurAmount = 8 }) {
       setOnLight(true);
       return;
     }
+
     const update = () => setOnLight(window.scrollY > 8);
     update();
     window.addEventListener("scroll", update, { passive: true });
@@ -200,7 +199,7 @@ export default function NavbarCFC({ blurAmount = 8 }) {
     isHome && !onLight ? "border-transparent" : "border-neutral-200/80";
   const bgClass =
     isHome && !onLight
-      ? "bg-transparent shadow-none"
+      ? "bg-black/10 backdrop-blur-md shadow-none"
       : "bg-white/85 backdrop-blur-md shadow-sm";
 
   return (
@@ -208,9 +207,7 @@ export default function NavbarCFC({ blurAmount = 8 }) {
       id="cfc-header"
       className={`fixed inset-x-0 top-0 z-[100] border-b ${borderClass} ${bgClass} transition-all duration-500 ease-in-out`}
       style={{
-        backdropFilter: isHome && !onLight ? "none" : `blur(${blurAmount}px)`,
-        WebkitBackdropFilter:
-          isHome && !onLight ? "none" : `blur(${blurAmount}px)`,
+        backdropFilter: `blur(${blurAmount}px)`,
       }}
     >
       <nav
@@ -224,6 +221,7 @@ export default function NavbarCFC({ blurAmount = 8 }) {
           onClick={() => setOpen(true)}
           aria-expanded={open}
           aria-controls="cfc-combined-shell"
+          aria-label="Toggle navigation menu"
           className={`inline-flex items-center gap-2 p-0 text-sm font-medium ${textClass} hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/10`}
         >
           <svg
@@ -244,7 +242,12 @@ export default function NavbarCFC({ blurAmount = 8 }) {
               'Didot, "Bodoni Moda", "Didot LT STD", "Times New Roman", serif',
           }}
         >
-          Closet Full of Coco
+          <img
+            src={isHome && !onLight ? "/logo-white.svg" : "/logo-black.png"}
+            alt="Closet Full of Coco Logo"
+            className="h-8 sm:h-10 md:h-12 w-auto mx-auto"
+            style={{ display: "block" }}
+          />
         </Link>
         {/* Right: Search + Account + Cart */}
         <div className="flex items-center gap-4 sm:gap-6">
@@ -383,8 +386,8 @@ export default function NavbarCFC({ blurAmount = 8 }) {
                 className="hidden md:block h-screen flex-1 relative"
                 role="region"
                 aria-label={
-                  activeKey
-                    ? `Preview for ${previews[activeKey]?.title}`
+                  activeKey && previews[activeKey]
+                    ? `Preview for ${previews[activeKey].title}`
                     : "Preview"
                 }
                 initial={{ opacity: 0, x: 20 }}
@@ -411,7 +414,6 @@ export default function NavbarCFC({ blurAmount = 8 }) {
                   className="absolute inset-0 bg-black/15 pointer-events-none"
                   style={{
                     backdropFilter: "blur(6px)",
-                    WebkitBackdropFilter: "blur(6px)",
                   }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -430,13 +432,13 @@ export default function NavbarCFC({ blurAmount = 8 }) {
                 >
                   <div className="max-w-md w-full rounded-md border border-white/20 bg-black/50 p-6 sm:p-8 backdrop-blur-lg text-white">
                     <h3 className="text-2xl font-semibold">
-                      {activeKey ? previews[activeKey].title : ""}
+                      {activeKey && previews[activeKey]?.title}
                     </h3>
                     <p className="mt-2 text-sm text-white/90">
-                      {activeKey ? previews[activeKey].tagline : ""}
+                      {activeKey && previews[activeKey]?.tagline}
                     </p>
                     <p className="mt-3 text-xs text-white/80">
-                      {activeKey ? previews[activeKey].blurb : ""}
+                      {activeKey && previews[activeKey]?.blurb}
                     </p>
                   </div>
                 </motion.div>
@@ -487,6 +489,7 @@ export default function NavbarCFC({ blurAmount = 8 }) {
                   placeholder="Search products..."
                   className="w-full bg-transparent text-neutral-900 placeholder-neutral-500 focus:outline-none text-base sm:text-lg"
                   autoFocus
+                  aria-describedby="search-results"
                 />
                 <button
                   type="button"
@@ -507,7 +510,7 @@ export default function NavbarCFC({ blurAmount = 8 }) {
                   </svg>
                 </button>
               </div>
-              <div className="max-h-[60vh] overflow-y-auto">
+              <div id="search-results" className="max-h-[60vh] overflow-y-auto">
                 {searchQuery && searchResults.length === 0 && (
                   <p className="text-neutral-600 text-sm">No results found.</p>
                 )}

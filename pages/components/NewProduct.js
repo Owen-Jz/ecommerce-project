@@ -5,54 +5,32 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 export const NEW_PRODUCTS = [
-  {
-    title: "Chanel Classic Bag",
-    price: "$4,500",
-    category: "bags",
-    images: ["/bag1.jpg", "/bag2.jpg"],
-    href: "/product/chanel-classic-bag",
-  },
-  {
-    title: "Pearl Necklace",
-    price: "$1,200",
-    category: "accessories",
-    images: ["/acc1.jpg", "/acc2.jpg"],
-    href: "/product/pearl-necklace",
-  },
-  {
-    title: "Vintage Jacket",
-    price: "$2,500",
-    category: "rtw",
-    images: ["/dress1.jpg", "/dress2.png"],
-    href: "/product/vintage-jacket",
-  },
+  { title: "Chanel Classic Bag", price: "$4,500", category: "bags", images: ["/bag1.jpg", "/bag2.jpg"], href: "/product/chanel-classic-bag" },
+  { title: "Pearl Necklace", price: "$1,200", category: "accessories", images: ["/acc1.jpg", "/acc2.jpg"], href: "/product/pearl-necklace" },
+  { title: "Vintage Jacket", price: "$2,500", category: "rtw", images: ["/dress1.jpg", "/dress2.png"], href: "/product/vintage-jacket" },
+  { title: "Leather Tote", price: "$3,800", category: "bags", images: ["/tote1.jpg", "/tote2.jpg"], href: "/product/leather-tote" },
 ];
+
+const DIDOT_STACK = 'Didot, "Bodoni Moda", "Didot LT STD", "Times New Roman", serif';
 
 export default function NewProductsSection({
   products = NEW_PRODUCTS,
   title = "New Arrivals",
   limit = null,
 }) {
-  const scrollRef = useRef(null);
-
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const scrollAmount = scrollRef.current.clientWidth; // move by full width (3 items)
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
+  const list = useMemo(
+    () => products.slice(0, limit || products.length),
+    [products, limit]
+  );
 
   return (
     <section id="new-products" className="w-full py-14 sm:py-20 bg-white">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Heading + View All CTA (always in a row) */}
+        {/* Heading + View All */}
         <div className="mb-8 sm:mb-12 flex flex-row items-center justify-between gap-4">
           <h2
             className="text-zinc-900 text-2xl md:text-3xl font-normal leading-tight"
-            style={{ fontFamily: '"Plantagenet Cherokee", serif' }}
+            style={{ fontFamily: DIDOT_STACK }}
           >
             {title}
           </h2>
@@ -64,72 +42,19 @@ export default function NewProductsSection({
           </Link>
         </div>
 
-        {/* Scrollable Container */}
-        <div className="relative">
-          <div
-            ref={scrollRef}
-            className="grid grid-flow-col auto-cols-[minmax(0,calc(100%/3))] gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 scrollbar-hide"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {products.map((p, i) => (
-              <motion.div
-                key={p.href + i}
-                className="snap-start w-full"
-                initial={{ opacity: 0, x: 24 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{
-                  duration: 0.5,
-                  delay: i * 0.04,
-                  ease: "easeOut",
-                }}
-              >
-                <ProductCard product={p} />
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Scroll Buttons (Desktop only) */}
-          <div className="hidden sm:flex">
-            <button
-              onClick={() => scroll("left")}
-              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md hover:bg-white transition"
-              aria-label="Scroll left"
+        {/* SAME GRID FORMAT AS SHOP ALL */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+          {list.map((p, i) => (
+            <motion.div
+              key={p.href + i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-            <button
-              onClick={() => scroll("right")}
-              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md hover:bg-white transition"
-              aria-label="Scroll right"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </button>
-          </div>
+              <ProductCard product={p} />
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
@@ -151,29 +76,28 @@ function ProductCard({ product }) {
           src={img0}
           alt={title}
           fill
-          sizes="(max-width:640px) 100vw, (max-width:1024px) 33.33vw, 33.33vw"
+          sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw"
           className="object-cover object-center transition-opacity duration-300 group-hover:opacity-0"
         />
         <Image
           src={img1}
           alt={`${title} (alternate)`}
           fill
-          sizes="(max-width:640px) 100vw, (max-width:1024px) 33.33vw, 33.33vw"
+          sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw"
           className="object-cover object-center opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       </div>
-      <div className="mt-3 flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          {/* No truncation / clamping */}
-          <p className="text-xs uppercase tracking-wide text-neutral-500">
-            {category === "rtw" ? "Ready to wear" : category}
-          </p>
-          <h3 className="mt-0.5 text-base font-normal">{title}</h3>
-        </div>
-        <div className="shrink-0 text-sm sm:text-base font-medium tabular-nums">
-          {price}
-        </div>
+      <div className="mt-2">
+        <p className="text-xs uppercase tracking-wide text-neutral-500">
+          {category === "rtw" ? "Ready to Wear" : category}
+        </p>
+        <h3
+          className="text-neutral-900 text-sm sm:text-base font-normal leading-snug"
+          style={{ fontFamily: DIDOT_STACK }}
+        >
+          {title}
+        </h3>
+        <p className="text-neutral-900 text-xs sm:text-sm font-semibold">{price}</p>
       </div>
     </Link>
   );
