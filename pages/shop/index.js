@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import SourcingBanner from "../components/SourcingBanner";
 import NavbarCFC from "../components/Navabar";
 import FooterCFC from "../components/Footer";
 
@@ -231,7 +232,7 @@ export default function ShopAllPage() {
         <section className="relative min-h-[80vh] flex items-center justify-center text-center">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/Slide2.jpg"
+              src="/image.png"
               alt="Shop all hero background"
               fill
               priority
@@ -245,11 +246,11 @@ export default function ShopAllPage() {
               className="text-white text-4xl sm:text-5xl font-normal leading-tight"
               style={{ fontFamily: DIDOT_STACK }}
             >
-              Shop All Collections
+              Shop All
             </h1>
-            <p className="text-white/80 text-sm sm:text-base">
+            {/* <p className="text-white/80 text-sm sm:text-base">
               Handbags, ready-to-wear, and accessories — curated and authenticated Chanel classics and rare finds.
-            </p>
+            </p> */}
           </div>
         </section>
 
@@ -328,7 +329,7 @@ export default function ShopAllPage() {
             </motion.div>
 
             {/* Pagination (placeholder) */}
-            <div className="mt-12 flex items-center justify-center gap-4 text-sm">
+            <div className="mt-12 mb-12 flex items-center justify-center gap-4 text-sm">
               <button className="text-neutral-600 hover:text-neutral-900">
                 ← Previous
               </button>
@@ -339,6 +340,8 @@ export default function ShopAllPage() {
                 Next →
               </button>
             </div>
+
+            <SourcingBanner imageSrc="/shop-source.png" />
           </div>
         </section>
       </main>

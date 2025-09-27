@@ -21,10 +21,11 @@ const PRODUCTS = [
 
 const RTW_FILTERS = [
   { key: "all", label: "All Ready-to-Wear" },
-  { key: "jackets", label: "Jackets" },
-  { key: "dresses", label: "Dresses" },
-  { key: "tops", label: "Tops" },
-  { key: "bottoms", label: "Bottoms" },
+  { key: "Outerwear", label: "Outerwear" },
+  { key: "Bottoms", label: "Bottoms" },
+  { key: "Tops", label: "Tops" },
+  { key: "Dresses", label: "Dresses" },
+  { key: "Swimwear", label: "Swimwear" },
 ];
 
 // "$2,800" -> 2800

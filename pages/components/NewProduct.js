@@ -8,7 +8,7 @@ export const NEW_PRODUCTS = [
   { title: "Chanel Classic Bag", price: "$4,500", category: "bags", images: ["/bag1.jpg", "/bag2.jpg"], href: "/product/chanel-classic-bag" },
   { title: "Pearl Necklace", price: "$1,200", category: "accessories", images: ["/acc1.jpg", "/acc2.jpg"], href: "/product/pearl-necklace" },
   { title: "Vintage Jacket", price: "$2,500", category: "rtw", images: ["/dress1.jpg", "/dress2.png"], href: "/product/vintage-jacket" },
-  { title: "Leather Tote", price: "$3,800", category: "bags", images: ["/tote1.jpg", "/tote2.jpg"], href: "/product/leather-tote" },
+  { title: "Leather Tote", price: "$3,800", category: "bags", images: ["/bag.png", "/bag.png"], href: "/product/leather-tote" },
 ];
 
 const DIDOT_STACK = 'Didot, "Bodoni Moda", "Didot LT STD", "Times New Roman", serif';

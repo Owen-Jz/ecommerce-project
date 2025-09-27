@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import Link from "next/link"; // Import Link from next/link
+import Link from "next/link";
+import Image from "next/image";
 
 export default function FooterCFC() {
   return (
@@ -11,10 +12,16 @@ export default function FooterCFC() {
           {/* Brand + newsletter */}
           <div className="md:col-span-5 lg:col-span-4 space-y-3">
             <div className="flex items-center gap-2">
-              <div className="h-6 w-6 bg-neutral-800" aria-hidden />
-              <div className="text-zinc-900 text-base font-bold">
-                Closet Full of Coco
-              </div>
+              <Link href="/" aria-label="Closet Full of Coco — Home">
+                <Image
+                  src="/logo-black.png"
+                  alt="Closet Full of Coco"
+                  width={112}  // adjust if needed
+                  height={28}  // adjust if needed
+                  className="h-7 w-auto"
+                  priority={false}
+                />
+              </Link>
             </div>
             <p className="text-neutral-500 text-xs max-w-sm">
               A private world of Chanel — curated, authenticated, and delivered
@@ -43,6 +50,7 @@ export default function FooterCFC() {
               </form>
             </div>
           </div>
+
           {/* Link columns */}
           <div className="md:col-span-7 lg:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-8">
             <div className="space-y-2.5">
@@ -158,8 +166,10 @@ export default function FooterCFC() {
             </div>
           </div>
         </div>
+
         {/* Divider */}
         <div className="my-8 h-px w-full bg-neutral-200" />
+
         {/* Bottom bar */}
         <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-neutral-500 text-xs">

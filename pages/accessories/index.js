@@ -21,10 +21,10 @@ const PRODUCTS = [
 
 const ACCESSORY_FILTERS = [
   { key: "all", label: "All Accessories" },
-  { key: "jewelry", label: "Jewelry" },
-  { key: "scarves", label: "Scarves" },
-  { key: "belts", label: "Belts" },
-  { key: "other", label: "Other" },
+  { key: "Earrings", label: "Earrings" },
+  { key: "Necklace", label: "Necklace" },
+  { key: "Belts", label: "Belts" },
+  { key: "Miscellaneous", label: "Miscellaneous" },
 ];
 
 // "$1,500" -> 1500

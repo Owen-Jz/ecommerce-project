@@ -68,10 +68,7 @@ export default function ThirdSlide() {
     }
   });
 
-  // Manual step change
-  const goToStep = (i) => {
-    setStep(i);
-  };
+  const goToStep = (i) => setStep(i);
 
   return (
     <section ref={sectionRef} className="relative w-full h-[300vh]">
@@ -108,18 +105,16 @@ export default function ThirdSlide() {
           />
         </div>
 
-        {/* Centered UI */}
+        {/* Foreground Content */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center">
-          <h2 className="text-zinc-50 text-3xl sm:text-5xl lg:text-6xl font-serif mb-8">
+          <h2 className="text-zinc-50 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif mb-6 leading-snug">
             Shop by Category
           </h2>
 
-          {/* Description ABOVE */}
-          <p className="mb-8 max-w-2xl text-neutral-100 font-sans text-lg sm:text-xl">
+          <p className="mb-8 max-w-2xl text-neutral-100 font-sans text-sm sm:text-base md:text-lg leading-relaxed">
             {CATEGORIES[step].description}
           </p>
 
-          {/* Bigger Category Buttons (no rounded corners) */}
           <nav className="flex flex-col sm:flex-row gap-6 items-center justify-center">
             {CATEGORIES.map((c, j) => {
               const active = j === step;
@@ -127,17 +122,17 @@ export default function ThirdSlide() {
                 <motion.button
                   key={c.label}
                   onClick={() => goToStep(j)}
-                  className={`relative px-8 py-4 text-lg sm:text-xl font-semibold font-sans transition-colors ${active
+                  className={`relative px-8 py-4 text-base sm:text-lg font-semibold font-sans transition-colors ${
+                    active
                       ? "text-neutral-900 bg-white"
                       : "text-neutral-100 hover:text-white/90"
-                    }`}
+                  }`}
                   aria-current={active ? "true" : "false"}
                   whileHover="hover"
                   initial="rest"
                   animate="rest"
                 >
                   {c.label}
-                  {/* Hover Outline */}
                   <motion.span
                     variants={{
                       rest: { opacity: 0, scale: 0.95 },
@@ -150,7 +145,6 @@ export default function ThirdSlide() {
               );
             })}
           </nav>
-
         </div>
       </div>
 

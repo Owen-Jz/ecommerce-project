@@ -21,10 +21,8 @@ const PRODUCTS = [
 
 const BAG_FILTERS = [
   { key: "all", label: "All Bags" },
-  { key: "flap", label: "Flap Bags" },
-  { key: "tote", label: "Totes" },
-  { key: "shoulder", label: "Shoulder Bags" },
-  { key: "clutch", label: "Clutches" },
+  { key: "Shoulder Bag", label: "Shoulder Bag" },
+  { key: "Minaudiere", label: "Minaudiere" },
 ];
 
 // "$4,500" -> 4500
